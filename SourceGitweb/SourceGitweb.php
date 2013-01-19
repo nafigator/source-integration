@@ -140,7 +140,7 @@ class SourceGitwebPlugin extends MantisSourcePlugin {
 		if ( is_blank( $t_branch ) ) {
 			$t_branch = 'master';
 		}
-		
+
 		if ($t_branch != '*')
 		{
 			$t_branches = array_map( 'trim', explode( ',', $t_branch ) );
@@ -149,14 +149,14 @@ class SourceGitwebPlugin extends MantisSourcePlugin {
 		{
 			$t_heads_url = $this->uri_base( $p_repo ) . 'a=heads';
 			$t_branches_input = url_get( $t_heads_url );
-			
+
 			$t_branches_input = str_replace( array(PHP_EOL, '&lt;', '&gt;', '&nbsp;'), array('', '<', '>', ' '), $t_branches_input );
-			
+
 			$t_branches_input_p1 = strpos( $t_branches_input, '<table class="heads">' );
 			$t_branches_input_p2 = strpos( $t_branches_input, '<div class="page_footer">' );
 			$t_gitweb_heads = substr( $t_branches_input, $t_branches_input_p1, $t_branches_input_p2 - $t_branches_input_p1 );
 			preg_match_all( '/<a class="list name".*>(.*)<\/a>/iU', $t_gitweb_heads, $t_matches, PREG_SET_ORDER );
-			
+
 			$t_branches = array();
 			foreach ($t_matches as $match)
 			{
@@ -169,7 +169,7 @@ class SourceGitwebPlugin extends MantisSourcePlugin {
 		}
 
 		$t_changesets = array();
-		
+
 		$t_changeset_table = plugin_table( 'changeset', 'Source' );
 
 		foreach( $t_branches as $t_branch ) {
@@ -274,12 +274,12 @@ class SourceGitwebPlugin extends MantisSourcePlugin {
 		if ( !SourceChangeset::exists( $p_repo->id, $t_commit['revision'] ) ) {
 
 			# Parse for commit data
-			preg_match( '#<tr><td>author</td><td>(?:<a[^>]*>)?([^<>]*)(?:</a>)? *(?:<a[^>]*>)?<([^<>]*)>(?:</a>)?</td>(?:<[^<>]*>\s*)*?</tr>\n<tr><td></td><td><span class="datetime">\w*, (\d* \w* \d* \d*:\d*:\d*)#', $t_gitweb_data, $t_matches );
+			preg_match( '#<tr><td>author</td><td>(?:<a[^>]*>)?([^<>]*)(?:</a>)? *(?:<a[^>]*>)?<([^<>]*)>(?:</a>)?</td>(?:<[^<>]*>\s*)*?</tr>\s*<tr><td></td><td><span class="datetime">\w*, (\d* \w* \d* \d*:\d*:\d*).*#', $t_gitweb_data, $t_matches );
 			$t_commit['author'] = $t_matches[1];
 			$t_commit['author_email'] = $t_matches[2];
 			$t_commit['date'] = date( 'Y-m-d H:i:s', strtotime( $t_matches[3] ) );
 
-			if( preg_match( '#<tr><td>committer</td><td>(?:<a[^>]*>)?([^<>]*)(?:</a>)? *(?:<a[^>]*>)?<([^<>]*)>(?:</a>)?</td>(?:<[^<>]*>\s*)*?</tr>#', $t_gitweb_data, $t_matches ) ) {
+			if( preg_match( '#<tr><td>committer</td><td>(?:<a[^>]*>)?([^<>]*)(?:</a>)? *(?:<a[^>]*>)?<([^<>]*)>(?:</a>)?</td>.*?</tr>#', $t_gitweb_data, $t_matches ) ) {
 				$t_commit['committer'] = $t_matches[1];
 				$t_commit['committer_email'] = $t_matches[2];
 			}
@@ -291,7 +291,7 @@ class SourceGitwebPlugin extends MantisSourcePlugin {
 				}
 			}
 
-			preg_match( '#<div class="page_body">\n(.*)\n</div>#', $t_gitweb_data, $t_matches );
+			preg_match( '#<div class="page_body">(?:\s|<br/>|<br>)*(.*)(?:\s|<br/>|<br>)*</div>#', $t_gitweb_data, $t_matches );
 			$t_commit['message'] = trim( str_replace( '<br/>', PHP_EOL, $t_matches[1] ) );
 
 			# Strip ref links and signoff spans from commit message
