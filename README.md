@@ -95,7 +95,7 @@ the bug tracker on GitHub:
 
 The latest source code can be found on GitHub:
 
-  http://github.com/mantisbt-plugins/source-integration
+  http://github.com/nafigator/source-integration
 
 Original project and documentation can be found on noswap.com:
 
