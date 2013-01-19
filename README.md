@@ -1,5 +1,5 @@
 
-# Mantis Source Integration
+# Mantis Source Integration (OpenBSD 5.2 compatible)
 
 Copyright (C) 2012 John Reese
 
@@ -35,12 +35,13 @@ integration framework and API.
 ## Requirements
 
 The Source Integration framework requires [Mantis](http://www.mantisbt.org/) 
-version 1.2.0 or higher.
+version 1.2.0 or higher. Tested Source and SourceGitWeb plugins with mantisbt
+version 1.2.11.
 
 ## Installation
 
 1. Download or clone a copy of the [Source Integration source
-   code](http://github.com/mantisbt-plugins/source-integration/).
+   code](http://github.com/nafigator/source-integration/).
 
 2. Copy the primary Source plugin (the `Source/` directory) into your Mantis 
    installation's `plugins/` directory.
